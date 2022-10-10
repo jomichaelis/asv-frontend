@@ -1,1 +1,0 @@
-import{a as e,o as s,b as o,e as t}from"./entry.871e6cef.js";const c={},a={class:"pa-4"},n=t("h2",null,"Dashboard",-1),_=[n];function r(d,i){return s(),o("div",a,_)}const f=e(c,[["render",r]]);export{f as default};
