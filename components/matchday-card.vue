@@ -23,10 +23,11 @@
             style="height: 100%;"
           >
             <v-btn
-                variant="plain"
-                :icon="true"
-                size="70"
-                @click="download"
+              variant="plain"
+              :icon="true"
+              size="70"
+              :href="`https://asv-api.jomichaelis.de/api/v21/preview-image?team=${team}&platform=${platform}`"
+              target="_blank"
             >
               <v-icon
                   size="50"
@@ -61,18 +62,12 @@ export default {
     }
   },
   methods: {
-    async download() {
-      await fetch("https://asv-api.jomichaelis.de/api/v21/preview-image?team=" + this.team + "&platform=" + this.platform, { method: 'get', mode: 'no-cors', referrerPolicy: 'no-referrer' })
-          .then(res => res.blob())
-          .then(res => {
-            const aElement = document.createElement('a');
-            aElement.setAttribute('download', "asv1.jpg");
-            const href = URL.createObjectURL(res);
-            aElement.href = href;
-            aElement.setAttribute('target', '_blank');
-            aElement.click();
-            URL.revokeObjectURL(href);
-          });
+    download() {
+      this.$axios
+        .$get(
+          "https://asv-api.jomichaelis.de/api/v21/preview-image?team=" + this.team + "&platform=" + this.platform,
+        )
+        .then(response => console.log(response))
     }
   }
 }
