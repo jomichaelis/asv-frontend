@@ -11,7 +11,7 @@
         <template v-slot:placeholder>
           <div class="d-flex align-center justify-center fill-height">
             <v-progress-circular
-                indeterminate="true"
+                :indeterminate="true"
                 color="grey-lighten-4"
             ></v-progress-circular>
           </div>
@@ -55,8 +55,11 @@ export default {
       default: 'facebook'
     },
   },
-  data: () => ({
-  }),
+  data() {
+    return {
+
+    }
+  },
   methods: {
     async download() {
       await fetch("https://asv-api.jomichaelis.de/api/v21/preview-image?team=" + this.team + "&platform=" + this.platform, { method: 'get', mode: 'no-cors', referrerPolicy: 'no-referrer' })
