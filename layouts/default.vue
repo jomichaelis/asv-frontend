@@ -23,11 +23,11 @@
 
         <div class="d-none d-sm-flex">
           <v-btn
-              class="mx-1"
-              v-for="link in links"
-              :key="link"
-              text
-              :to=link.link
+            class="mx-1"
+            v-for="link in links"
+            :key="link.name"
+            text
+            :to=link.link
           >
             {{ link.name }}
           </v-btn>
@@ -67,12 +67,12 @@
           dense
       >
         <v-list-item
-            v-for="item in links"
-            :key="item.name"
-            :to="item.link"
-            router
-            exact
-            active-class="primary--text"
+          v-for="(item, i) in links"
+          :key="i"
+          :to="item.link"
+          router
+          exact
+          active-class="primary--text"
         >
           <v-list-item-title v-text="item.name" />
         </v-list-item>
