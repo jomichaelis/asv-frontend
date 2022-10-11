@@ -11,9 +11,8 @@
 
         <div class="d-none d-sm-flex">
           <v-btn
-              class="mx-1"
               v-for="link in links"
-              :key="link"
+              :key=link.name
               text
               :to=link.link
           >
@@ -47,11 +46,12 @@
 
     <v-navigation-drawer
       v-model="drawer"
-      absolute
-      temporary="true"
+      app
+      clipped
+      class="d-flex d-sm-none"
     >
       <v-list
-        nav="true"
+        :nav="true"
         dense
       >
         <v-list-item

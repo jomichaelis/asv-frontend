@@ -1,5 +1,5 @@
 <template>
-  <div class="pa-4">
+  <v-container>
     <h2>Dashboard</h2>
-  </div>
+  </v-container>
 </template>
