@@ -9,8 +9,8 @@
         <MatchdayCard platform="facebook" team="1" />
       </v-col>
       <v-col
-        cols="12"
-        sm="6"
+          cols="12"
+          sm="6"
       >
         <MatchdayCard platform="facebook" team="2" />
       </v-col>
@@ -33,8 +33,12 @@
 </template>
 
 <script>
+import MatchdayCard from "../../components/matchday-card";
 export default {
   data: () => ({
   }),
+  components: {
+    MatchdayCard
+  }
 }
 </script>

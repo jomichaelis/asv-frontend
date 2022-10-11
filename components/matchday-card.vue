@@ -1,36 +1,36 @@
 <template>
-  <v-hover v-slot="{ isHovering, props }">
+  <v-hover v-slot="{ hover }">
     <v-card
-      color="#eeeeee"
-      v-bind="props"
+        color="#eeeeee"
+        v-bind="props"
     >
       <v-img
-        :src="`https://asv-api.jomichaelis.de/api/v21/preview-image?team=${team}&platform=${platform}`"
-        :lazy-src="`https://asv-api.jomichaelis.de/api/v21/preview-image/lazy?platform=${platform}`"
+          :src="`https://asv-api.jomichaelis.de/api/v21/preview-image?team=${team}&platform=${platform}`"
+          :lazy-src="`https://asv-api.jomichaelis.de/api/v21/preview-image/lazy?platform=${platform}`"
       >
         <template v-slot:placeholder>
           <div class="d-flex align-center justify-center fill-height">
             <v-progress-circular
-              indeterminate="true"
-              color="grey-lighten-4"
+                indeterminate="true"
+                color="grey-lighten-4"
             ></v-progress-circular>
           </div>
         </template>
         <v-expand-transition>
           <div
-            v-if="isHovering"
-            class="d-flex transition-fast-in-fast-out bg-black v-card--reveal text-h2"
+            v-if="hover"
+            class="d-flex transition-fast-in-fast-out black v-card--reveal text-h2"
             style="height: 100%;"
           >
             <v-btn
-              variant="plain"
-              :icon="true"
-              size="70"
-              @click="download"
+                variant="plain"
+                :icon="true"
+                size="70"
+                @click="download"
             >
               <v-icon
-                size="50"
-                color="yellow"
+                  size="50"
+                  color="yellow"
               >
                 mdi-download
               </v-icon>
@@ -60,16 +60,16 @@ export default {
   methods: {
     async download() {
       await fetch("https://asv-api.jomichaelis.de/api/v21/preview-image?team=" + this.team + "&platform=" + this.platform, { method: 'get', mode: 'no-cors', referrerPolicy: 'no-referrer' })
-        .then(res => res.blob())
-        .then(res => {
-          const aElement = document.createElement('a');
-          aElement.setAttribute('download', "asv1.jpg");
-          const href = URL.createObjectURL(res);
-          aElement.href = href;
-          aElement.setAttribute('target', '_blank');
-          aElement.click();
-          URL.revokeObjectURL(href);
-        });
+          .then(res => res.blob())
+          .then(res => {
+            const aElement = document.createElement('a');
+            aElement.setAttribute('download', "asv1.jpg");
+            const href = URL.createObjectURL(res);
+            aElement.href = href;
+            aElement.setAttribute('target', '_blank');
+            aElement.click();
+            URL.revokeObjectURL(href);
+          });
     }
   }
 }
