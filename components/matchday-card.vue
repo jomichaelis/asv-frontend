@@ -13,16 +13,18 @@
             ></v-progress-circular>
           </div>
         </template>
-        <div class="d-flex align-center justify-center fill-height">
+        <div
+          class="d-flex align-center justify-center fill-height white"
+          v-if="loading"
+        >
           <v-progress-circular
               :indeterminate="true"
               color="grey-lighten-4"
-              v-if="loading"
           ></v-progress-circular>
         </div>
         <v-expand-transition>
           <div
-            v-if="hover"
+            v-if="hover && !loading"
             class="d-flex transition-fast-in-fast-out black v-card--reveal text-h2"
             style="height: 100%;"
           >
