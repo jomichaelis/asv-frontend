@@ -116,5 +116,8 @@ export default {
       },
     ],
   }),
+  created() {
+    this.$store.dispatch("bindMatchdayImages")
+  }
 }
 </script>

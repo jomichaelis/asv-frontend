@@ -45,6 +45,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/firebase'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -66,6 +67,21 @@ export default {
           success: colors.green.accent3
         }
       }
+    }
+  },
+
+  firebase: {
+    config: {
+      apiKey: "AIzaSyCjeg4jKNGAyYI1hLG6k6qkQD4LDnpPTD4",
+          authDomain: "asv-webservices.firebaseapp.com",
+          projectId: "asv-webservices",
+          storageBucket: "asv-webservices.appspot.com",
+          messagingSenderId: "493355864822",
+          appId: "1:493355864822:web:db98ff86e05a13e88ad2d7"
+    },
+    services: {
+      firestore: true,
+      storage: true
     }
   },
 
