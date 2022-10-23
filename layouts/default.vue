@@ -15,7 +15,7 @@
             tile
         >
           <v-img
-            src="/asv-logo.png"
+            src="/asv-logo200.png"
             alt="ASV Logo"
             contain
           />
