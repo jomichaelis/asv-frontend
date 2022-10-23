@@ -1,5 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
+import * as dotenv from 'dotenv'
 
+dotenv.config()
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
 
@@ -72,12 +74,12 @@ export default {
 
   firebase: {
     config: {
-      apiKey: "AIzaSyCjeg4jKNGAyYI1hLG6k6qkQD4LDnpPTD4",
-          authDomain: "asv-webservices.firebaseapp.com",
-          projectId: "asv-webservices",
-          storageBucket: "asv-webservices.appspot.com",
-          messagingSenderId: "493355864822",
-          appId: "1:493355864822:web:db98ff86e05a13e88ad2d7"
+      apiKey: process.env.API_KEY,
+      authDomain: process.env.AUTH_DOMAIN,
+      projectId: process.env.PROJECT_ID,
+      storageBucket: process.env.STORAGE_BUCKET,
+      messagingSenderId: process.env.MESSAGING_SENDER_ID,
+      appId: process.env.APP_ID
     },
     services: {
       firestore: true,
