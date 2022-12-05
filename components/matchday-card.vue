@@ -3,7 +3,7 @@
     <v-card color="#eeeeee">
       <v-img
         :src=imageURL
-        lazy-src="/lazy_fb.jpg"
+        :lazy-src="platform === 'facebook' ? '/lazy_fb_2223.jpg' : 'lazy_ig_2223.jpg'"
       >
         <template v-slot:placeholder>
           <div class="d-flex align-center justify-center fill-height">

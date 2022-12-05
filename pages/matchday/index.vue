@@ -64,8 +64,8 @@ export default {
     async regenerateImages() {
       this.buttonLoading = true
       await this.$axios.$get('https://asv-matchday-preview-generator-public-ynj2djdt3a-lm.a.run.app?platform=facebook&team=1')
-      await this.$axios.$get('https://asv-matchday-preview-generator-public-ynj2djdt3a-lm.a.run.app?platform=facebook&team=2')
       await this.$axios.$get('https://asv-matchday-preview-generator-public-ynj2djdt3a-lm.a.run.app?platform=instagram&team=1')
+      await this.$axios.$get('https://asv-matchday-preview-generator-public-ynj2djdt3a-lm.a.run.app?platform=facebook&team=2')
       await this.$axios.$get('https://asv-matchday-preview-generator-public-ynj2djdt3a-lm.a.run.app?platform=instagram&team=2')
       this.buttonLoading = false
     }
