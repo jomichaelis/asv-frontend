@@ -82,6 +82,7 @@ export default {
       appId: process.env.APP_ID
     },
     services: {
+      auth: true,
       firestore: true,
       storage: true
     }

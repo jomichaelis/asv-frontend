@@ -117,7 +117,11 @@ export default {
     ],
   }),
   created() {
+    this.$fire.auth.signInAnonymously()
+      .catch((error) => {
+        console.error(error);
+      })
     this.$store.dispatch("bindMatchdayImages")
-  }
+  },
 }
 </script>
