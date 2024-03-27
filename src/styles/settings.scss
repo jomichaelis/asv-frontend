@@ -1,0 +1,77 @@
+/**
+ * src/styles/settings.scss
+ *
+ * Configures SASS variables and Vuetify overwrites
+ */
+
+// https://vuetifyjs.com/features/sass-variables/`
+// @use 'vuetify/settings' with (
+//   $color-pack: false
+// );
+
+@import url('https://fonts.googleapis.com/css2?family=Borel&family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Radio+Canada:ital,wght@0,300..700;1,300..700&display=swap');
+
+.font-Radio-Canada {
+    font-family: "Radio Canada", sans-serif !important;
+    font-optical-sizing: auto !important;
+    font-style: normal !important;
+    font-variation-settings: "wdth" 100 !important;
+}
+
+.font-Quicksand {
+    font-family: 'Quicksand', sans-serif !important;
+}
+
+.font-bold {
+    font-weight: 600 !important;
+}
+
+.v-container {
+    max-width: 1460px !important;
+}
+
+@media screen and (max-width: 600px) {
+    .v-container {
+        padding-top: 6px;
+        padding-left: 3px;
+        padding-right: 3px;
+    }    
+}
+
+.fill-height > .v-responsive__content {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.main-div {
+    width: 100%;
+}
+
+.bottom-info {
+    display: flex;
+    flex:1;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+}
+
+.v-footer {
+    margin-left: 56px;
+}
+
+@media screen and (max-width: 1279px) {
+    .v-footer {
+        margin-left: 0px;
+    }
+}
+
+.confirm-dialog-card > .v-card-title {
+    padding: 16px 24px !important;
+}
+
+.link-none {
+    text-decoration: none !important;
+    color: unset !important;
+}
