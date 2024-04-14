@@ -8,7 +8,7 @@
         >
         </v-app-bar-nav-icon>
 
-        <router-link to="/" style="width: 50px;">
+        <router-link :to="{ name: 'Home' }" style="width: 50px;">
           <v-img
             :class="mobileNavigation ? 'ml-2' : 'ml-4'"
             src="@/assets/asv-logo200.png"
@@ -18,7 +18,7 @@
           />
         </router-link>
 
-        <router-link to="/" class="title-link appbar-title ml-3 mt-1">
+        <router-link :to="{ name: 'Home' }" class="title-link appbar-title ml-3 mt-1">
           <span class="title ml-3 mr-5 white--text">asv<span class="font-weight-light">.webservices</span></span>
         </router-link>
       </v-app-bar>
@@ -45,6 +45,7 @@
                 :title="item.title"
                 :prepend-icon="item.icon"
                 :href="item.href"
+                :value="item.title"
                 target="_blank"
                 color="primary"
               ></v-list-item>
@@ -124,27 +125,36 @@ import { useTheme } from 'vuetify'
 import { signOut } from '@/plugins/firebase'
 
 import { useAuthStore } from '@/store/auth'
+import { useTeamsStore } from '@/store/teams'
+import { useUpcomingMatchesStore } from '@/store/upcomingMatches'
+import { useMatchdayPreviewsStore } from '@/store/matchdayPreviews'
 
 import Avatar from '@/components/Avatar.vue'
-
-const theme = useTheme()
 
 const router = useRouter()
 
 const authStore = useAuthStore()
+const teamsStore = useTeamsStore()
+const upcomingMatchesStore = useUpcomingMatchesStore()
+const matchdayPreviewsStore = useMatchdayPreviewsStore()
 
 const drawer = ref(true)
 
 const displayWidth = ref(1920)
-
-const notifications = ref(['ghost']) // TODO: Implement notifications
 
 const loading = ref(true)
 
 onMounted(async () => {
   loading.value = true
 
+  // navbar
+  window.addEventListener('resize', onResize, { passive: true })
+  onResize()
+
   // load Stores
+  await teamsStore.bind()
+  await upcomingMatchesStore.bind()
+  await matchdayPreviewsStore.bind()
 
   loading.value = false
 })
@@ -155,6 +165,25 @@ const onSignOut = () => {
       router.push({ name: 'Anmelden' })
     })
 }
+
+const onResize = () => {
+  displayWidth.value = window.innerWidth
+  if(window.innerWidth < 1280) {
+    drawer.value = false
+  } else {
+    drawer.value = true
+  }
+}
+
+const mobileNavigation = computed(() => {
+  return displayWidth.value < 1280
+})
+
+onBeforeUnmount(() => {
+  if (typeof window === 'undefined') return
+  window.removeEventListener('resize', onResize, { passive: true })
+})
+
 </script>
 
 <script>
@@ -169,7 +198,7 @@ export default {
       },
       {
         title: 'Matchday',
-        icon: 'mdi-image-auto-adjust',
+        icon: 'mdi-image-multiple',
         to: 'Matchday'
       },
       {

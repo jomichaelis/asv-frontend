@@ -61,10 +61,6 @@ export const useAuthStore = defineStore('auth', {
     },
     async setInitialPassword(oobCode, newPassword) {
       await fbVerifyPasswordResetCode(getAuth(), oobCode)
-        .then((email) => {
-          const accountEmail = email
-          console.log(accountEmail, newPassword)
-        })
         .catch((error) => {
           console.error(error)
         })

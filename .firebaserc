@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "default": "asv-webservices"
+  },
+  "targets": {
+    "asv-webservices": {
+      "hosting": {
+        "staging": [
+          "asv"
+        ],
+        "production": [
+          "asv-webservices"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

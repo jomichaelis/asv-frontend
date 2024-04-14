@@ -54,7 +54,7 @@ export const useUsersStore = defineStore('users', {
           this.all.push({id: docSnap.id, ...docSnap.data()})
         }
       } else {
-        console.log("No such document!")
+        console.error("No such document!")
       }
     },
 

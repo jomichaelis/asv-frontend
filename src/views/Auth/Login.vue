@@ -178,14 +178,15 @@ const pwRules = ref([
 
 const onSignIn = async () => {
   loading.value = true
-  const data = await signIn(email.value, password.value)
-  if (data) {
+  try {
+    await signIn(email.value, password.value)
     router.push(route.query.redirect || { name: 'Home' })
     toast.success('Anmeldung erfolgreich')
-  } else {
-    toast.error('Anmeldung fehlgeschlagen')
+  } catch (error) {
+    toast.error(`Anmeldung fehlgeschlagen: ${error}`)
+  } finally {
+    loading.value = false
   }
-  loading.value = false
 }
 
 const onSignInWithGoogle = async () => {

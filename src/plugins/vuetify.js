@@ -25,4 +25,11 @@ export default createVuetify({
       },
     },
   },
+  defaults: {
+    VBtn: {
+      //
+    }
+  },
 })
+
+

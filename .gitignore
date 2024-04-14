@@ -24,3 +24,10 @@ pnpm-debug.log*
 
 venv
 .env
+
+*service-account.json
+emulator-data
+.firebase
+firestore-debug.log
+ui-debug.log
+__pycache__
