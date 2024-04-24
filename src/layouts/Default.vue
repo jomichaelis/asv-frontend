@@ -204,7 +204,7 @@ export default {
       {
         title: 'Fotos',
         icon: 'mdi-open-in-new',
-        href: 'https://cloud.jomichaelis.de/s/cBKW5XRsn7CDpsb'
+        href: 'https://cloud.jomichaelis.de/s/nY93bJXrmCmzTDz'
       },
       {
         title: 'Verwaltung',
