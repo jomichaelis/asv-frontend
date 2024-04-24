@@ -3,15 +3,32 @@
     <v-responsive class="align-center text-center fill-height mx-2">
       <div class="main-div">
         <v-row justify="center">
-          <v-img height="200px" width="200px" src="@/assets/asv-logo200.png" />
+          <v-img height="160px" width="160px" src="@/assets/asv-logo200.png" />
         </v-row>
 
-        <div v-if="formState === 'login'" style="height: 300px">
+        <div v-if="formState === 'login'">
           <v-card
             class="mx-auto mt-10 pa-12 pb-8"
             elevation="8"
             max-width="486"
           >
+
+            <v-btn
+              variant="tonal"
+              border
+              :loading="loadingGoogle"
+              :disabled="loadingGoogle"
+              class="mb-9"
+              @click="onSignInWithGoogle"
+            >
+            <template v-slot:prepend>
+              <img class="mr-1" width="20" height="20" src="@/assets/google.svg" alt="google-logo">
+            </template>
+              Mit Google anmelden
+            </v-btn>
+
+            <v-divider color="primary" class="border-opacity-50 mb-9" />
+
             <v-form
               ref="form"
               v-model="valid"
@@ -69,21 +86,6 @@
               </v-col>
             </v-row>
 
-            <v-divider color="primary" class="border-opacity-50" />
-
-            <v-btn
-              variant="tonal"
-              border
-              :loading="loadingGoogle"
-              :disabled="loadingGoogle"
-              class="mt-6"
-              @click="onSignInWithGoogle"
-            >
-            <template v-slot:prepend>
-              <img class="mr-1" width="20" height="20" src="@/assets/google.svg" alt="google-logo">
-            </template>
-              Mit Google anmelden
-            </v-btn>
           </v-card>
         </div>
 
@@ -171,8 +173,8 @@ const pwRules = ref([
     return 'Bitte gib ein Passwort an.'
   },
   value => {
-    if (value?.length > 9) return true
-    return 'Dein Passwort hat mindestens 10 Zeichen.'
+    if (value?.length > 5) return true
+    return 'Dein Passwort hat mindestens 6 Zeichen.'
   },
 ])
 
