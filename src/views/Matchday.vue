@@ -32,13 +32,14 @@
               no-data-text="Keine Teams gefunden"
             >
               <template v-slot:item.wappen="{ item }">
-                <v-avatar tile start :size="56" :color="item.wappen_x160?.url?.length > 0 ? 'transparent' : 'primary'" class="my-2">
+                <v-avatar v-if="item.wappen_x160?.url?.length > 0" tile start :size="56" color="transparent" class="my-2">
                   <v-img
-                    v-if="item.wappen_x160?.url?.length > 0"
                     :src="item.wappen_x160?.url"
                   >
                   </v-img>
-                  <v-icon v-else :size="32">
+                </v-avatar>
+                <v-avatar v-else tile start :size="56" color="primary" class="my-2">
+                  <v-icon :size="32">
                     mdi-image-off-outline
                   </v-icon>
                 </v-avatar>
@@ -215,16 +216,13 @@ const download = (url) => {
 }
 
 const nextID = computed(() => {
-  return matchdayPreviewsStore.getAll?.map((item) => {
-    console.log({
-      diff: differenceInSeconds(new Date(), item.kickoff.toDate()),
-      id: item.id
-    })?.filter((item) => item.diff < 0)
-
-    return {
-      diff: differenceInSeconds(new Date(), item.kickoff.toDate()),
-      id: item.id
-    }})?.filter((item) => item.diff < 0)?.sort((a, b) => b.diff - a.diff)[0]?.id
+  const nextMatchdayPreviews = matchdayPreviewsStore.getAllSortedByKickoff
+  const filteredNextMatchdayPreviews = nextMatchdayPreviews.filter((item) => {
+    return differenceInSeconds(new Date(), item.kickoff.toDate()) < 0
+  })
+  return filteredNextMatchdayPreviews?.sort((a, b) => {
+    return b.kickoff.toDate() - a.kickoff.toDate()
+  })?.reverse()[0]?.id
 })
 
 const onDelete = async (matchdayID) => {

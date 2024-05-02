@@ -4,10 +4,12 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   signInWithPopup,
+  sendPasswordResetEmail,
   GoogleAuthProvider,
   signOut as fbSignOut,
   onAuthStateChanged,
-  connectAuthEmulator
+  connectAuthEmulator,
+  createUserWithEmailAndPassword
 } from "firebase/auth"
 import { getStorage, connectStorageEmulator } from "firebase/storage"
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions"
@@ -49,24 +51,42 @@ export const signIn = async (email, password) => {
   }
 }
 
+export const signUp = async (email, password) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+    return userCredential.user
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
 export const signInWithGoogle = async () => {
-  return await signInWithPopup(auth, new GoogleAuthProvider())
-    .then((result) => {
-      const user = result.user
-      return user
-    })
-    .catch((error) => {
-      console.error(error)
-      throw error
-    })
+  try {
+    const userCredential = await signInWithPopup(auth, new GoogleAuthProvider())
+    return userCredential.user
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
 }
 
 export const signOut = async () => {
-  await fbSignOut(auth)
-    .catch((error) => {
-      console.error(error)
-      throw error
-    })
+  try {
+    await fbSignOut(auth)
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+export const resetPW = async (email) => {
+  try {
+    await sendPasswordResetEmail(auth, email)
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
 }
 
 if (import.meta.env.VITE_FIREBASE_USE_EMULATOR === 'true' && import.meta.env.MODE === 'development') {

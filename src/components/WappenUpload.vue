@@ -109,11 +109,11 @@ const team = computed(() => teamsStore.getByID(props.teamID))
 const onFileChanged = async () => {
   if(imageFile.value == null) return
   uploadLoading.value = true
-  let filename = imageFile.value[0].name
+  let filename = imageFile.value?.name
   const date = format(new Date(), 'yyyy-MM-dd-HH-mm-ss')
   filename = `${date}_${filename}`
   const metadata = {
-    contentType: imageFile.value[0].type,
+    contentType: imageFile.value?.type,
     customMetadata: {
       teamID: props.teamID,
       userID: getAuth().currentUser?.uid,
@@ -121,7 +121,7 @@ const onFileChanged = async () => {
   }
 
   const storageRef = fbRef(storage, 'wappen/' + filename)
-  const uploadTask = uploadBytesResumable(storageRef, imageFile.value[0], metadata)
+  const uploadTask = uploadBytesResumable(storageRef, imageFile.value, metadata)
 
   uploadTask.on('state_changed',
     (snapshot) => {

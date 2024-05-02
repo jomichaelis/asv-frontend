@@ -1,12 +1,12 @@
 <template>
   <v-card variant="tonal" :loading="props.loading">
-    <v-row justify="space-evenly" class="mt-3 mb-0 mx-8">
+    <v-row justify="space-evenly" class="mt-3 mb-0 mx-3">
       <v-col cols="12" class="text-center mb-1">
         <p class="text-h6">{{ team?.description }}</p>
         <p class="text-body-2">{{ match?.liga }}</p>
       </v-col>
       <v-col cols="5" class="text-center">
-        <v-avatar tile :size="140" class="mb-4">
+        <v-avatar tile :size="100" class="mb-4">
           <v-img :src="homeTeam?.wappen_square?.url" />
         </v-avatar>
         <p class="text-body-1">{{ homeTeam?.long1 }}</p>
@@ -16,7 +16,7 @@
         :
       </v-col>
       <v-col cols="5" class="text-center">
-        <v-avatar tile :size="140" class="mb-4">
+        <v-avatar tile :size="100" class="mb-4">
           <v-img :src="guestTeam?.wappen_square?.url" />
         </v-avatar>
         <p class="text-body-1">{{ guestTeam?.long1 }}</p>
@@ -28,52 +28,36 @@
       </v-col>
     </v-row>
     <v-card-actions>
-      <div v-if="matchdayPreview?.status === 'finished'">
-        <v-row class="mx-2 my-2">
-          <v-col align-self="center" class="pa-0 pe-2 cursor-pointer" :href="matchdayPreview.desktop?.downloadURL" :data-fancybox="matchdayPreview.id">
-            <v-img
-              :width="130"
-              :src=matchdayPreview.desktop?.thumbDownloadURL
-            ></v-img>
-          </v-col>
-          <v-col align-self="center" class="pa-0 pe-2 cursor-pointer" :href="matchdayPreview.story?.downloadURL" :data-fancybox="matchdayPreview.id">
-            <v-img
-              :width="46"
-              :src=matchdayPreview.story?.thumbDownloadURL
-            ></v-img>
-          </v-col>
-          <v-col align-self="center" class="pa-0 pe-2 cursor-pointer" :href="matchdayPreview.square?.downloadURL" :data-fancybox="matchdayPreview.id">
-            <v-img
-              :width="80"
-              :src=matchdayPreview.square?.thumbDownloadURL
-            ></v-img>
-          </v-col>
-        </v-row>
-      </div>
-      <v-spacer />
-      <v-chip
-        v-if="matchdayPreview?.status === 'finished'"
-        label
-        prepend-icon="mdi-check"
-        variant="tonal"
-        color="success"
-        class="ml-2"
-      >
-        Bilder generiert
-      </v-chip>
-      <v-btn
-        v-else
-        rounded="pill"
-        variant="outlined"
-        :loading="loadingPreview"
-        :disabled="match?.isLive"
-        :prepend-icon="match?.isLive ? 'mdi-record' : 'mdi-image-plus-outline'"
-        :color="match?.isLive ? 'error' : 'primary'"
-        class="pl-3 mt-1 mb-2 mr-1 text-none"
-        @click="onCreateMatchdayPreview"
-      >
-        {{ match?.isLive ? 'Spiel läuft' : 'Bilder generieren' }}
-      </v-btn>
+      <v-row justify="space-between">
+        <v-col v-if="matchdayPreview?.status === 'finished'">
+          <v-row class="mx-2 my-2">
+            <v-col align-self="center" class="pa-1 pe-2 cursor-pointer" :href="matchdayPreview.desktop?.downloadURL"
+              :data-fancybox="matchdayPreview.id">
+              <v-img :width="130" :src=matchdayPreview.desktop?.thumbDownloadURL></v-img>
+            </v-col>
+            <v-col align-self="center" class="pa-1 pe-2 cursor-pointer" :href="matchdayPreview.story?.downloadURL"
+              :data-fancybox="matchdayPreview.id">
+              <v-img :width="46" :src=matchdayPreview.story?.thumbDownloadURL></v-img>
+            </v-col>
+            <v-col align-self="center" class="pa-1 pe-2 cursor-pointer" :href="matchdayPreview.square?.downloadURL"
+              :data-fancybox="matchdayPreview.id">
+              <v-img :width="80" :src=matchdayPreview.square?.thumbDownloadURL></v-img>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col align-self="center" class="text-center">
+          <v-chip v-if="matchdayPreview?.status === 'finished'" label prepend-icon="mdi-check" variant="tonal"
+            color="success" class="mr-2">
+            Bilder generiert
+          </v-chip>
+          <v-btn v-else rounded="pill" variant="outlined" :loading="loadingPreview" :disabled="match?.isLive"
+            :prepend-icon="match?.isLive ? 'mdi-record' : 'mdi-image-plus-outline'"
+            :color="match?.isLive ? 'error' : 'primary'" class="pl-3 mt-1 mb-2 mr-1 text-none"
+            @click="onCreateMatchdayPreview">
+            {{ match?.isLive ? 'Spiel läuft' : 'Bilder generieren' }}
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-card-actions>
   </v-card>
 </template>
@@ -210,7 +194,6 @@ const onCreateMatchdayPreview = async () => {
 </script>
 
 <style scoped>
-
 .rotate90 {
   transform: rotate(-90deg);
 }
@@ -222,5 +205,4 @@ const onCreateMatchdayPreview = async () => {
 .cursor-pointer {
   cursor: pointer;
 }
-
 </style>
