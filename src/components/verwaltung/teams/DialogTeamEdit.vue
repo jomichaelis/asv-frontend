@@ -51,18 +51,6 @@
               v-model="long2"
               label="2. Zeile"
             ></v-text-field>
-            <v-text-field
-              v-if="props.asv"
-              v-model="bfvURL"
-              label="BFV-Team-URL"
-              class="pb-2"
-            ></v-text-field>
-            <v-combobox
-              v-model="identifier"
-              label="Identifier (bfv)"
-              chips
-              multiple
-            ></v-combobox>
             <WappenUpload :teamID="props.team?.id" />
           </v-card-text>
           <v-divider></v-divider>
@@ -125,8 +113,6 @@ const name = ref('')
 const description = ref('')
 const long1 = ref('')
 const long2 = ref('')
-const bfvURL = ref('')
-const identifier = ref([])
 
 const form = ref(null)
 const valid = ref(false)
@@ -150,8 +136,6 @@ onMounted(() => {
   description.value = props.team?.description || ''
   long1.value = props.team?.long1 || ''
   long2.value = props.team?.long2 || ''
-  bfvURL.value = props.team?.bfvURL || ''
-  identifier.value = props.team?.identifier || []
 })
 
 const onSave = async (isActive) => {
@@ -167,13 +151,11 @@ const onSave = async (isActive) => {
     long1: long1.value,
     long2: long2.value,
     isASV: props.asv,
-    identifier: identifier.value
   }
   if (props.asv) {
     payload = {
       ...payload,
       description: description.value,
-      bfvURL: bfvURL.value,
     }
   }
   await teamsStore.updateTeam(props.team.id, payload)

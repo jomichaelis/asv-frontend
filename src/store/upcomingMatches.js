@@ -19,7 +19,7 @@ export const useUpcomingMatchesStore = defineStore('upcoming-matches', {
   actions: {
     ////////////// REALTIME CONNECTION //////////////
     bind() {
-      const q = query(collection(db, "next-matches"))
+      const q = query(collection(db, "upcoming_matches"))
       binding = onSnapshot(q, (querySnapshot) => {
         this.all = []
         querySnapshot.forEach((doc) => {
@@ -33,7 +33,7 @@ export const useUpcomingMatchesStore = defineStore('upcoming-matches', {
     /////////////////////////////////////////////////
     // Fetch all upcoming matches
     async fetchAll() {
-      const q = query(collection(db, "next-matches"))
+      const q = query(collection(db, "upcoming_matches"))
       const querySnapshot = await getDocs(q)
       this.all = []
       querySnapshot.forEach((doc) => {
@@ -41,7 +41,7 @@ export const useUpcomingMatchesStore = defineStore('upcoming-matches', {
       })
     },
     async fetchSingle(id) {
-      const docRef = doc(db, "next-matches", id)
+      const docRef = doc(db, "upcoming_matches", id)
       const docSnap = await getDoc(docRef)
       if (docSnap.exists()) {
         if(this.all.find((team) => team.id === docSnap.id)) {
@@ -57,7 +57,7 @@ export const useUpcomingMatchesStore = defineStore('upcoming-matches', {
 
     // add upcoming match
     async add(payload) {
-      const docRef = collection(db, "next-matches")
+      const docRef = collection(db, "upcoming_matches")
       await addDoc(docRef, payload)
         .catch((error) => {
           console.error(error)
@@ -67,7 +67,7 @@ export const useUpcomingMatchesStore = defineStore('upcoming-matches', {
 
     // update upcoming match
     async update(id, myPayload) {
-      const docRef = doc(db, "next-matches", id)
+      const docRef = doc(db, "upcoming_matches", id)
       const payload = {
         ...myPayload,
         updatedTimestamp: new Date(),
@@ -82,7 +82,7 @@ export const useUpcomingMatchesStore = defineStore('upcoming-matches', {
 
     // set upcoming match
     async set(id, myPayload, merge=true) {
-      const docRef = doc(db, "next-matches", id)
+      const docRef = doc(db, "upcoming_matches", id)
       const payload = {
         ...myPayload,
         updatedTimestamp: new Date(),
@@ -97,7 +97,7 @@ export const useUpcomingMatchesStore = defineStore('upcoming-matches', {
 
     // delete upcoming match
     async deleteTeam(id, myPayload) {
-      const docRef = doc(db, "next-matches", id)
+      const docRef = doc(db, "upcoming_matches", id)
       await deleteDoc(docRef)
         .catch((error) => {
           console.error(error)

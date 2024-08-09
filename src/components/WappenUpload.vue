@@ -110,8 +110,8 @@ const onFileChanged = async () => {
   if(imageFile.value == null) return
   uploadLoading.value = true
   let filename = imageFile.value?.name
-  const date = format(new Date(), 'yyyy-MM-dd-HH-mm-ss')
-  filename = `${date}_${filename}`
+  // const date = format(new Date(), 'yyyy-MM-dd-HH-mm-ss')
+  // filename = `${date}_${filename}`
   const metadata = {
     contentType: imageFile.value?.type,
     customMetadata: {

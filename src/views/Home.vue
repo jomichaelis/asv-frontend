@@ -74,21 +74,15 @@ const reloadUpcomingMatches = async () => {
   }
   await Promise.all(promises)
 
-  // for (let i = 0; i < asvTeams.value.length; i++) {
-  //   loadings.value[i] = true
-  //   await loadUpcomingMatch(asvTeams.value[i])
-  //   loadings.value[i] = false
-  // }
-
   loadingUpcomingMatches.value = false
 }
 
 const loadUpcomingMatch = async (team, idx) => {
-  loadings.value[idx] = true
-  const fetchUpcomingMatch = httpsCallable(functions, 'fetchUpcomingMatch')
+  const GetNextMatches = httpsCallable(functions, 'get_next_matches')
+  console.log(GetNextMatches)
   let res = null
   try {
-    res = await fetchUpcomingMatch({ bfvURL: team.bfvURL, teamID: team.id })
+    res = await GetNextMatches({ teamURL: team.teamURL })
   } catch (e) {
     console.error(e)
     toast.error(e.message)
@@ -96,32 +90,10 @@ const loadUpcomingMatch = async (team, idx) => {
     return
   }
   let payload = res.data
-  payload.kickoff = new Date(payload.date)
-  delete payload.date
+  payload.kickoff = new Date(payload.timestamp)
+  delete payload.timestamp
 
-  // get home team ID
-  const homeTeam = teamsStore.getAll?.find(t => t.identifier.includes(payload.home))
-  if (!!homeTeam) {
-    payload.home = homeTeam.id
-  } else {
-    console.error('Home team not found', payload.home)
-    toast.error(`Heimteam nicht gefunden: ${payload.home}`)
-    loadings.value[idx] = false
-    return
-  }
-
-  // get away team ID
-  const guestTeam = teamsStore.getAll?.find(t => t.identifier.includes(payload.guest))
-  if (!!guestTeam) {
-    payload.guest = guestTeam.id
-  } else {
-    console.error('Guest team not found', payload.guest)
-    toast.error(`Gastteam nicht gefunden: ${payload.guest}`)
-    loadings.value[idx] = false
-    return
-  }
-
-  const matchRef = doc(db, 'next-matches', team.id)
+  const matchRef = doc(db, 'upcoming_matches', res.data.team_home)
   try {
     await setDoc(matchRef, payload)
   } catch (e) {

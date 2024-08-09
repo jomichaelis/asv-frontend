@@ -30,7 +30,7 @@ export const firebaseApp = initializeApp(firebaseConfig)
 export const db = getFirestore()
 export const auth = getAuth()
 export const storage = getStorage()
-export const functions = getFunctions() // firebaseApp, "europe-west3")
+export const functions = getFunctions(firebaseApp, "europe-west3")
 
 export const getCurrentUser = () => {
   return new Promise((resolve, reject) => {

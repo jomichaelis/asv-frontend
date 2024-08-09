@@ -6,7 +6,7 @@ import { db } from '@/plugins/firebase'
 
 let binding = null
 
-export const useTeamsStore = defineStore('teams', {
+export const useTeamsStore = defineStore('teams3', {
   state: () => ({
     all: []
   }),
@@ -29,7 +29,7 @@ export const useTeamsStore = defineStore('teams', {
   actions: {
     ////////////// REALTIME CONNECTION //////////////
     bind() {
-      const q = query(collection(db, "teams"))
+      const q = query(collection(db, "teams3"))
       binding = onSnapshot(q, (querySnapshot) => {
         this.all = []
         querySnapshot.forEach((doc) => {
@@ -43,7 +43,7 @@ export const useTeamsStore = defineStore('teams', {
     /////////////////////////////////////////////////
     // Fetch all teams
     async fetchAll() {
-      const q = query(collection(db, "teams"))
+      const q = query(collection(db, "teams3"))
       const querySnapshot = await getDocs(q)
       this.all = []
       querySnapshot.forEach((doc) => {
@@ -51,7 +51,7 @@ export const useTeamsStore = defineStore('teams', {
       })
     },
     async fetchTeam(id) {
-      const docRef = doc(db, "teams", id)
+      const docRef = doc(db, "teams3", id)
       const docSnap = await getDoc(docRef)
       if (docSnap.exists()) {
         if(this.all.find((team) => team.id === docSnap.id)) {
@@ -67,7 +67,7 @@ export const useTeamsStore = defineStore('teams', {
 
     // add team
     async addTeam(payload) {
-      const docRef = collection(db, "teams")
+      const docRef = collection(db, "teams3")
       await addDoc(docRef, payload)
         .catch((error) => {
           console.error(error)
@@ -77,7 +77,7 @@ export const useTeamsStore = defineStore('teams', {
 
     // update team
     async updateTeam(id, myPayload) {
-      const docRef = doc(db, "teams", id)
+      const docRef = doc(db, "teams3", id)
       const payload = {
         ...myPayload,
         updatedTimestamp: new Date(),
@@ -92,7 +92,7 @@ export const useTeamsStore = defineStore('teams', {
 
     // set team
     async setTeam(id, myPayload, merge=true) {
-      const docRef = doc(db, "teams", id)
+      const docRef = doc(db, "teams3", id)
       const payload = {
         ...myPayload,
         updatedTimestamp: new Date(),
@@ -107,7 +107,7 @@ export const useTeamsStore = defineStore('teams', {
 
     // delete team
     async deleteTeam(id, myPayload) {
-      const docRef = doc(db, "teams", id)
+      const docRef = doc(db, "teams3", id)
       const payload = {
         ...myPayload,
         updatedTimestamp: new Date(),

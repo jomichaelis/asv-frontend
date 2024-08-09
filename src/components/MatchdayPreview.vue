@@ -30,32 +30,30 @@
     <v-card-actions>
       <v-row justify="space-between">
         <v-col v-if="matchdayPreview?.status === 'finished'">
-          <v-row class="mx-2 my-2">
-            <v-col align-self="center" class="pa-1 pe-2 cursor-pointer" :href="matchdayPreview.desktop?.downloadURL"
-              :data-fancybox="matchdayPreview.id">
-              <v-img :width="130" :src=matchdayPreview.desktop?.thumbDownloadURL></v-img>
-            </v-col>
-            <v-col align-self="center" class="pa-1 pe-2 cursor-pointer" :href="matchdayPreview.story?.downloadURL"
+          <v-row justify="start" class="mx-2 my-2">
+            <v-col cols="auto" align-self="center" class="pa-1 pe-2 cursor-pointer" :href="matchdayPreview.story?.downloadURL"
               :data-fancybox="matchdayPreview.id">
               <v-img :width="46" :src=matchdayPreview.story?.thumbDownloadURL></v-img>
             </v-col>
-            <v-col align-self="center" class="pa-1 pe-2 cursor-pointer" :href="matchdayPreview.square?.downloadURL"
+            <v-col cols="auto" align-self="center" class="pa-1 pe-2 cursor-pointer" :href="matchdayPreview.square?.downloadURL"
               :data-fancybox="matchdayPreview.id">
               <v-img :width="80" :src=matchdayPreview.square?.thumbDownloadURL></v-img>
             </v-col>
           </v-row>
         </v-col>
         <v-col align-self="center" class="text-center">
-          <v-chip v-if="matchdayPreview?.status === 'finished'" label prepend-icon="mdi-check" variant="tonal"
-            color="success" class="mr-2">
-            Bilder generiert
-          </v-chip>
-          <v-btn v-else rounded="pill" variant="outlined" :loading="loadingPreview" :disabled="match?.isLive"
-            :prepend-icon="match?.isLive ? 'mdi-record' : 'mdi-image-plus-outline'"
-            :color="match?.isLive ? 'error' : 'primary'" class="pl-3 mt-1 mb-2 mr-1 text-none"
-            @click="onCreateMatchdayPreview">
-            {{ match?.isLive ? 'Spiel läuft' : 'Bilder generieren' }}
-          </v-btn>
+          <v-row justify="end" class="mx-2 my-2">
+            <v-chip v-if="matchdayPreview?.status === 'finished'" label prepend-icon="mdi-check" variant="tonal"
+              color="success" class="mr-2">
+              Bilder generiert
+            </v-chip>
+            <v-btn v-else rounded="pill" variant="outlined" :loading="loadingPreview" :disabled="match?.isLive"
+              :prepend-icon="match?.isLive ? 'mdi-record' : 'mdi-image-plus-outline'"
+              :color="match?.isLive ? 'error' : 'primary'" class="pl-3 mt-1 mb-2 mr-1 text-none"
+              @click="onCreateMatchdayPreview">
+              {{ match?.isLive ? 'Spiel läuft' : 'Bilder generieren' }}
+            </v-btn>
+          </v-row>
         </v-col>
       </v-row>
     </v-card-actions>
@@ -109,8 +107,8 @@ const match = computed(() => upcomingMatchesStore.getByID(props.id))
 
 const team = computed(() => teamsStore.getByID(props.id))
 
-const homeTeam = computed(() => teamsStore.getByID(match.value?.home))
-const guestTeam = computed(() => teamsStore.getByID(match.value?.guest))
+const homeTeam = computed(() => teamsStore.getByID(match.value?.team_home))
+const guestTeam = computed(() => teamsStore.getByID(match.value?.team_guest))
 
 const date = computed(() => {
   if (!!match.value?.kickoff === false) return ''
@@ -120,6 +118,16 @@ const date = computed(() => {
 const time = computed(() => {
   if (!!match.value?.kickoff === false) return ''
   return format(match.value?.kickoff?.toDate(), 'HH:mm', { locale: de })
+})
+
+const dateF = computed(() => {
+  if (!!match.value?.kickoff === false) return ''
+  return format(match.value?.kickoff?.toDate(), 'dd.MM.yyyy', { locale: de })
+})
+
+const day = computed(() => {
+  if (!!match.value?.kickoff === false) return ''
+  return format(match.value?.kickoff?.toDate(), 'EEEE', { locale: de })
 })
 
 const matchdayPreview = computed(() => {
@@ -132,8 +140,6 @@ const onCreateMatchdayPreview = async () => {
   const payload = {
     home: homeTeam.value?.id,
     guest: guestTeam.value?.id,
-    home_team: match.value?.home_team,
-    guest_team: match.value?.guest_team,
     kickoff: match.value?.kickoff?.toDate(),
     status: 'scheduled',
     createdUserID: getAuth().currentUser.uid,
@@ -149,31 +155,19 @@ const onCreateMatchdayPreview = async () => {
   const res = await createMatchdayPrevew({
     matchID: matchID,
     asvID: props.id,
-    homeName: homeTeam.value?.name,
-    homeLong1: homeTeam.value?.long1,
-    homeLong2: homeTeam.value?.long2,
-    homeTeam: match.value?.home_team,
+    home_team: match.value?.team_home,
+    guest_team: match.value?.team_guest,
     homeWappenPath: homeTeam.value?.wappen_square?.path,
-    homeIsASV: homeTeam.value?.isASV,
-    guestName: guestTeam.value?.name,
-    guestLong1: guestTeam.value?.long1,
-    guestLong2: guestTeam.value?.long2,
-    guestTeam: match.value?.guest_team,
-    guestIsASV: guestTeam.value?.isASV,
     guestWappenPath: guestTeam.value?.wappen_square?.path,
-    date: date.value,
+    day: day.value,
+    date: dateF.value,
     time: time.value,
-    liga: match.value?.liga
+    homeName: homeTeam.value?.name,
+    guestName: guestTeam.value?.name
   })
 
   matchdayPreviewsStore.update(matchID, {
     status: 'finished',
-    desktop: {
-      downloadURL: res.data.desktopDownloadURL,
-      path: res.data.desktopPath,
-      thumbDownloadURL: res.data.desktopThumbDownloadURL,
-      thumbPath: res.data.desktopThumbPath
-    },
     story: {
       downloadURL: res.data.storyDownloadURL,
       path: res.data.storyPath,

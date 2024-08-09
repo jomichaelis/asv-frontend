@@ -60,18 +60,6 @@
                   <p class="text-body-1">{{ teamsStore.getByID(item.guest)?.name }} {{ item?.guest_team > 1 ? item?.guest_team : '' }}</p>
                 </div>
               </template>
-              <template v-slot:item.desktop="{ item }">
-                <a
-                  :href="item.desktop?.downloadURL"
-                  :data-fancybox="item.id"
-                  class=""
-                >
-                  <v-img
-                    :width="130"
-                    :src=item.desktop?.thumbDownloadURL
-                  ></v-img>
-                </a>
-              </template>
               <template v-slot:item.story="{ item }">
                 <a
                   :href="item.story?.downloadURL"
@@ -173,15 +161,14 @@ const sortBy = ref([{ key: 'kickoff', order: 'desc' }])
 const headers = ref([
   { title: 'Heimteam', key: 'home', sortable: false, align: 'center' },
   { title: 'Auswärtsteam', key: 'guest', sortable: false, align: 'center' },
-  { title: 'Desktop', key: 'desktop', sortable: false },
-  { title: 'Story', key: 'story', sortable: false },
-  { title: 'Quadratisch', key: 'square', sortable: false },
+  { title: 'Story', key: 'story', sortable: false, align: 'start'},
+  { title: 'Quadratisch', key: 'square', sortable: false, align: 'start' },
   { title: 'Anstoß', key: 'kickoff', order: 'desc' },
   { title: 'Aktionen', key: 'actions', sortable: false, align: 'end'}
 ])
 
 const matchdayPreviews = computed(() => {
-  return matchdayPreviewsStore.getAll
+  return matchdayPreviewsStore.getAllSortedByKickoff
 })
 
 const isSoon = (date) => {

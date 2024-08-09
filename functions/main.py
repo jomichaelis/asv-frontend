@@ -1,3 +1,4 @@
+import hashlib
 import io
 import pathlib
 import requests
@@ -7,15 +8,17 @@ from bs4 import BeautifulSoup
 
 from datetime import datetime as dt, timedelta
 
-from firebase_admin import credentials, initialize_app, firestore, storage
+from firebase_admin import credentials, initialize_app, firestore, storage, _apps
 from firebase_functions import firestore_fn, storage_fn, https_fn, options
 
-from matchday_preview.desktop import create_and_upload_desktop
 from matchday_preview.story import create_and_upload_story
 from matchday_preview.square import create_and_upload_square
 
-cred = credentials.Certificate("./asv-webservices-service-account.json")
-initialize_app(cred)
+
+if not _apps:
+    cred = credentials.Certificate("./asv-webservices-service-account.json")
+    default_app = initialize_app(cred)
+
 
 def resize(image, resize: bool=True, dim: list=[160, 160]):
     # Resize if needed
@@ -87,7 +90,7 @@ def generate_wappen_thumbnail(event: storage_fn.CloudEvent[storage_fn.StorageObj
         
         # Write back to database
         db = firestore.client()
-        team_ref = db.collection("teams")
+        team_ref = db.collection("teams3")
         team_ref.document(metadata.get("teamID")).update(
             { 'wappen_' + name: {
                 'filename': filename,
@@ -108,7 +111,7 @@ def generate_wappen_thumbnail(event: storage_fn.CloudEvent[storage_fn.StorageObj
     )
 
 
-@https_fn.on_call()
+@https_fn.on_call(region="europe-west3")
 def fetchUpcomingMatch(req: https_fn.CallableRequest):
     bfvURL = req.data["bfvURL"]
 
@@ -180,16 +183,11 @@ def fetchUpcomingMatch(req: https_fn.CallableRequest):
     }
 
 
-@https_fn.on_call()
+@https_fn.on_call(region="europe-west3")
 def create_matchday_preview(req: https_fn.CallableRequest):
-    image_desktop = create_and_upload_desktop(req.data)
-    image_story = create_and_upload_story(req.data)
     image_square = create_and_upload_square(req.data)
+    image_story = create_and_upload_story(req.data)
     return {
-        "desktopDownloadURL": image_desktop["downloadURL"],
-        "desktopPath": image_desktop["path"],
-        "desktopThumbDownloadURL": image_desktop["thumbDownloadURL"],
-        "desktopThumbPath": image_desktop["thumbPath"],
         "storyDownloadURL": image_story["downloadURL"],
         "storyPath": image_story["path"],
         "storyThumbDownloadURL": image_story["thumbDownloadURL"],
@@ -198,4 +196,40 @@ def create_matchday_preview(req: https_fn.CallableRequest):
         "squarePath": image_square["path"],
         "squareThumbDownloadURL": image_square["thumbDownloadURL"],
         "squareThumbPath": image_square["thumbPath"],
+    }
+
+
+@https_fn.on_call(region="europe-west3")
+def get_next_matches(req: https_fn.CallableRequest):
+    page = requests.get(req.data['teamURL'])
+    soup = BeautifulSoup(page.content, "html.parser")
+    next_game = soup.find_all("div", class_="bfv-spieltag-eintrag")[0]
+    link_to_match = next_game.find("a", class_="bfv-spieltag-eintrag__match-link")['href']
+
+    page = requests.get(link_to_match)
+    soup = BeautifulSoup(page.content, "html.parser")
+
+    # date
+    datetime_str = soup.find("div", class_="bfv-matchday-date-time").find_all("span")
+    date_str, time_str = datetime_str[1].text.strip().split("/")
+    date_str = date_str.strip()
+    time_str = time_str.strip().replace("Uhr", "").strip()
+    d = dt.strptime(f"{date_str}T{time_str}", '%d.%m.%YT%H:%M')
+    timestamp = d.timestamp()
+
+    # teams
+    team_home = soup.find("div", class_="bfv-matchdata-result__team--team0")
+    team_home = team_home.find("a", class_="bfv-matchdata-result__team-link")
+    r = team_home['href'].split("/")
+    team_home_id = r[-2] + "-" + hashlib.shake_256(r[-1].encode()).hexdigest(2)
+    team_guest = soup.find("div", class_="bfv-matchdata-result__team--team1")
+    team_guest = team_guest.find("a", class_="bfv-matchdata-result__team-link")
+    r = team_guest['href'].split("/")
+    team_guest_id = r[-2] + "-" + hashlib.shake_256(r[-1].encode()).hexdigest(2)
+    matchday_id = f"{team_home_id}-{team_guest_id}-{round(timestamp)}"
+
+    return {
+        'team_home': team_home_id,
+        'team_guest': team_guest_id,
+        'timestamp': d.isoformat()
     }
