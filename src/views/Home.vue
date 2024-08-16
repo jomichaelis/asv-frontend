@@ -53,6 +53,8 @@ const upcomingMatchesStore = useUpcomingMatchesStore()
 
 const loadingUpcomingMatches = ref(false)
 
+console.log(import.meta.env)
+
 const asvTeams = computed(() => teamsStore.getAllSorted)
 const upcomingMatches = computed(() => upcomingMatchesStore.getAll?.sort((a, b) => {
   const aTeam = asvTeams.value.find(t => t.id === a.id)
@@ -92,8 +94,10 @@ const loadUpcomingMatch = async (team, idx) => {
   let payload = res.data
   payload.kickoff = new Date(payload.timestamp)
   delete payload.timestamp
+  const upcomingMatchID = payload.id
+  delete payload.id
 
-  const matchRef = doc(db, 'upcoming_matches', res.data.team_home)
+  const matchRef = doc(db, 'upcoming_matches', upcomingMatchID)
   try {
     await setDoc(matchRef, payload)
   } catch (e) {

@@ -152,7 +152,7 @@ const onFileChanged = async () => {
       uploadLoading.value = false
     },
     async () => {
-      const docRef = doc(db, "teams", props.teamID)
+      const docRef = doc(db, "teams3", props.teamID)
       const payload = {
         wappen: {
           filename: filename,
@@ -175,7 +175,7 @@ const onFileChanged = async () => {
 }
 
 const bindTeam = () => {
-  const q = doc(db, "teams", props.teamID)
+  const q = doc(db, "teams3", props.teamID)
   teamBinding.value = onSnapshot(q, { includeMetadataChanges: true }, async (doc) => {
     const data = doc.data()
     if(data?.status !== 'resizing') {

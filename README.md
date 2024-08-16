@@ -1,4 +1,7 @@
-# default
+# ASV Frontend
+
+!!! warning
+    Apparently, env-variables are not updated when running `npm run dev` in the VSCode terminal. This is a known issue with Vite. To fix this, run the command in a different terminal.
 
 ## Project setup
 

@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app"
-import { getFirestore, doc, setDoc, connectFirestoreEmulator } from "firebase/firestore"
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore"
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -27,9 +27,9 @@ const firebaseConfig = {
 // init firebase
 export const firebaseApp = initializeApp(firebaseConfig)
 
-export const db = getFirestore()
-export const auth = getAuth()
-export const storage = getStorage()
+export const db = getFirestore(firebaseApp)
+export const auth = getAuth(firebaseApp)
+export const storage = getStorage(firebaseApp)
 export const functions = getFunctions(firebaseApp, "europe-west3")
 
 export const getCurrentUser = () => {

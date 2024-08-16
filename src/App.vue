@@ -3,11 +3,11 @@
 </template>
 
 <script setup>
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { auth } from '@/plugins/firebase'
+import { onAuthStateChanged } from 'firebase/auth'
 
 import { useAuthStore } from '@/store/auth'
 
-const auth = getAuth()
 const authStore = useAuthStore()
 
 onAuthStateChanged(auth, async (user) => {

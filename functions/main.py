@@ -228,7 +228,14 @@ def get_next_matches(req: https_fn.CallableRequest):
     team_guest_id = r[-2] + "-" + hashlib.shake_256(r[-1].encode()).hexdigest(2)
     matchday_id = f"{team_home_id}-{team_guest_id}-{round(timestamp)}"
 
+    id = ""
+    if team_home_id.startswith("asv-moehrendorf-"):
+        id = team_home_id
+    else:
+        id = team_guest_id
+
     return {
+        'id': id,
         'team_home': team_home_id,
         'team_guest': team_guest_id,
         'timestamp': d.isoformat()
