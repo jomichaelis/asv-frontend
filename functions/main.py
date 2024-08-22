@@ -111,8 +111,9 @@ def generate_wappen_thumbnail(event: storage_fn.CloudEvent[storage_fn.StorageObj
     )
 
 
+"""
 @https_fn.on_call(region="europe-west3")
-def fetchUpcomingMatch(req: https_fn.CallableRequest):
+def fetch_upcoming_match(req: https_fn.CallableRequest):
     bfvURL = req.data["bfvURL"]
 
     page = requests.get(bfvURL)
@@ -181,7 +182,7 @@ def fetchUpcomingMatch(req: https_fn.CallableRequest):
         "liga": liga,
         "isLive": isLive,
     }
-
+"""
 
 @https_fn.on_call(region="europe-west3")
 def create_matchday_preview(req: https_fn.CallableRequest):
